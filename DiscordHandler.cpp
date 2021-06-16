@@ -28,33 +28,20 @@ std::string DiscordHandler::Translate::ResultToString(discord::Result result) {
     }
 }
 
-void DiscordHandler::init(long long clientid) {
-    auto result = discord::Core::Create(clientid, DiscordCreateFlags_Default, &discordMain);
-    //discord::Result result = discordMain->Create(854404100342153236,DiscordCreateFlags_Default,&discordMain);
-    //qInfo(Translate::ResultToString(result).c_str());
-    if(result != discord::Result::Ok) {
-        sentry_capture_event(sentry_value_new_message_event(
-          /*   level */ SENTRY_LEVEL_FATAL,
-          /*  logger */ "RPC Init",
-          /* message */ Translate::ResultToString(result).c_str()
-        ));
-    }
+discord::Result DiscordHandler::init(long long clientid) {
+    return discord::Core::Create(clientid, DiscordCreateFlags_Default, &discordMain);
 
 }
-void DiscordHandler::SetStatus(discord::Activity Activity) {
-    discordMain->ActivityManager().UpdateActivity(Activity, [](discord::Result result) {
-        if(result != discord::Result::Ok) {
-            sentry_capture_event(sentry_value_new_message_event(
-              /*   level */ SENTRY_LEVEL_FATAL,
-              /*  logger */ "RPC Status Modifier",
-              /* message */ Translate::ResultToString(result).c_str()
-            ));
-        }
-    });
+void DiscordHandler::SetStatus(discord::Activity Activity, std::function<void(discord::Result)> callback) {
+    discordMain->ActivityManager().UpdateActivity(Activity, callback);
+}
+bool DiscordHandler::isInit() {
+    if(discordMain) {
+        return true;
+    }
+    return false;
 }
 void DiscordHandler::Render() {
-    if(discordMain) {
-        discordMain->RunCallbacks();
-    }
+    discordMain->RunCallbacks();
 }
 

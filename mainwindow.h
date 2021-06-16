@@ -5,6 +5,7 @@
 #include <discord.h>
 #include <sentry.h>
 #include <QTimer>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,11 +22,14 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_pushButton_2_clicked();
+
 public slots:
     void SimulateFrame();
 
 private:
     Ui::MainWindow *ui;
     QTimer *RenderCaller;
+    QMessageBox Msgbox;
 };
 #endif // MAINWINDOW_H

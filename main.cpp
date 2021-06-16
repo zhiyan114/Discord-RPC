@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     sentry_options_set_release(options, "Internal-DiscordRPC@1.0.0");
     auto sentryClose = qScopeGuard([] { sentry_close(); });
     // Load Discord RPC Handler
-    DiscordHandler::init();
+    DiscordHandler::init(854404100342153236);
     // Load UI Handler
     sentry_init(options);
     w.show();

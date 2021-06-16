@@ -8,8 +8,8 @@ namespace DiscordHandler {
 namespace Translate {
  std::string ResultToString(discord::Result discresult);
 }
-void init();
-void SetStatus(); // Accepting variable later
+void init(long long clientid);
+void SetStatus(discord::Activity Activity); // Accepting variable later
 void Render();
 }
 

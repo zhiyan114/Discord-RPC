@@ -18,6 +18,8 @@ std::string DiscordHandler::Translate::ResultToString(discord::Result result) {
             return "Internal Error";
         case discord::Result::InvalidAccessToken:
             return "Invalid Access Token";
+        case discord::Result::InvalidBase64:
+            return "Invalid Base64";
         case discord::Result::Ok:
             return "OK";
         default:
@@ -26,12 +28,11 @@ std::string DiscordHandler::Translate::ResultToString(discord::Result result) {
     }
 }
 
-void DiscordHandler::init() {
-    auto result = discord::Core::Create(854404100342153236, DiscordCreateFlags_Default, &discordMain);
+void DiscordHandler::init(long long clientid) {
+    auto result = discord::Core::Create(clientid, DiscordCreateFlags_Default, &discordMain);
     //discord::Result result = discordMain->Create(854404100342153236,DiscordCreateFlags_Default,&discordMain);
-    qInfo(Translate::ResultToString(result).c_str());
+    //qInfo(Translate::ResultToString(result).c_str());
     if(result != discord::Result::Ok) {
-        qInfo("AN ERROR OCCURED DURING INIT");
         sentry_capture_event(sentry_value_new_message_event(
           /*   level */ SENTRY_LEVEL_FATAL,
           /*  logger */ "RPC Init",
@@ -40,13 +41,8 @@ void DiscordHandler::init() {
     }
 
 }
-void DiscordHandler::SetStatus() {
-    discord::Activity activity{};
-    activity.SetState("Testing");
-    activity.SetDetails("Fruit Loops");
-    activity.SetType(discord::ActivityType::Playing);
-    discordMain->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
-        qInfo("Status Set");
+void DiscordHandler::SetStatus(discord::Activity Activity) {
+    discordMain->ActivityManager().UpdateActivity(Activity, [](discord::Result result) {
         if(result != discord::Result::Ok) {
             sentry_capture_event(sentry_value_new_message_event(
               /*   level */ SENTRY_LEVEL_FATAL,

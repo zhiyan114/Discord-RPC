@@ -28,10 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.AppIDInput = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.DiscordRPCRender = new System.Windows.Forms.Timer(this.components);
+            this.InternalLogDisplay = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -73,17 +77,46 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // DiscordRPCRender
+            // 
+            this.DiscordRPCRender.Tick += new System.EventHandler(this.DiscordRPCRender_Tick);
+            // 
+            // InternalLogDisplay
+            // 
+            this.InternalLogDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.InternalLogDisplay.Location = new System.Drawing.Point(12, 390);
+            this.InternalLogDisplay.Multiline = true;
+            this.InternalLogDisplay.Name = "InternalLogDisplay";
+            this.InternalLogDisplay.ReadOnly = true;
+            this.InternalLogDisplay.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.InternalLogDisplay.Size = new System.Drawing.Size(700, 215);
+            this.InternalLogDisplay.TabIndex = 4;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(303, 363);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(122, 24);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Internal Logs:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(724, 617);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.InternalLogDisplay);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.AppIDInput);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
             this.Text = "Discord RPC";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -96,6 +129,9 @@
         private System.Windows.Forms.TextBox AppIDInput;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Timer DiscordRPCRender;
+        private System.Windows.Forms.TextBox InternalLogDisplay;
+        private System.Windows.Forms.Label label3;
     }
 }
 

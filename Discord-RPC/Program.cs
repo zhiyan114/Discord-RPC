@@ -21,14 +21,14 @@ namespace Discord_RPC
                 o.Dsn = "https://5e25cf80720b4a35ad1447e345ac633c@o125145.ingest.sentry.io/5825567";
 #if DEBUG
                 o.Debug = true;
-                o.Environment = "Development";
+                o.Environment = "Debug";
                 o.TracesSampleRate = 0.5;
 #elif RELEASE
                 o.Environment = "Release";
                 o.Release = "Discord-RPC@1.0.0";
                 o.TracesSampleRate = 0.1;
 #endif
-                o.BeforeSend = a => PromptUserFeedback(a);
+                o.BeforeSend = a => PrepareEvent(a);
 
 
             }))
@@ -58,7 +58,7 @@ namespace Discord_RPC
             
         }
 
-        static public SentryEvent PromptUserFeedback(SentryEvent e)
+        static public SentryEvent PrepareEvent(SentryEvent e)
         {
             e.SetTag("Ignore Report", ShowReport.ToString());
             return e;

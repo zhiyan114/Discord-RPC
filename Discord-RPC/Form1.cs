@@ -25,7 +25,18 @@ namespace Discord_RPC
         {
 #if DEBUG
             this.Text = this.Text + " (Debug Mode)";
+            WriteLog("Debug Mode Enabled. If you're seeing this, please use release mode instead unless your developing.");
 #endif
+        }
+
+        private void Rpcclient_OnPresenceUpdate(object sender, DiscordRPC.Message.PresenceMessage args)
+        {
+            WriteLog("Your Presence has been updated.");
+        }
+
+        private void Rpcclient_OnReady(object sender, DiscordRPC.Message.ReadyMessage args)
+        {
+            WriteLog("Client Connected. Detected User: "+args.User.Username+"#"+args.User.Discriminator+" (ID: "+args.User.ID+")");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -34,6 +45,19 @@ namespace Discord_RPC
             if(ulong.TryParse(AppIDInput.Text,out ulong result))
             {
                 rpcclient = new DiscordRpcClient(result.ToString());
+                rpcclient.OnReady += Rpcclient_OnReady;
+                rpcclient.OnPresenceUpdate += Rpcclient_OnPresenceUpdate;
+                if (!rpcclient.Initialize())
+                {
+                    // Cant init the client
+                    MessageBox.Show(this, "Unable to initialize the client, maybe invalid client ID?","Initialize Failed",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    rpcclient.Dispose();
+                    return;
+                }
+                AppIDInput.ReadOnly = true;
+                button1.Enabled = false;
+                button2.Enabled = true;
+                MessageBox.Show("The client was successful initialized", "Initialized Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 // Do Some Configuration Here
                 DiscordRPCRender.Start();
             } else
@@ -44,7 +68,7 @@ namespace Discord_RPC
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            rpcclient.Dispose();
+            //rpcclient.Dispose();
         }
 
         private void DiscordRPCRender_Tick(object sender, EventArgs e)
@@ -53,7 +77,19 @@ namespace Discord_RPC
         }
         private void WriteLog(string text)
         {
-            InternalLogDisplay.Text = InternalLogDisplay.Text + text + "\r\n";
+            InternalLogDisplay.Text = InternalLogDisplay.Text + DateTime.Now.ToString("h:mm:ss tt")+": "+text + "\r\n";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            RichPresence presence = new RichPresence();
+            Assets RPCAsset = new Assets();
+            RPCAsset.
+            presence.WithAssets(RPCAsset);
+            presence.WithState(StateInput.Text);
+            presence.WithDetails(DetailInput.Text);
+            presence.Buttons = { };
+            rpcclient.SetPresence(presence);
         }
     }
 }

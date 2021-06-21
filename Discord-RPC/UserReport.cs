@@ -15,7 +15,6 @@ namespace Discord_RPC {
     public partial class UserReport : Form
     {
         public SentryId MainEventId;
-        private UserFeedback Feedback;
         public UserReport() // SentryEvent sevent
         {
             InitializeComponent();

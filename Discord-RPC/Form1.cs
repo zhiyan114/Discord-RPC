@@ -23,6 +23,7 @@ namespace Discord_RPC
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            WriteLog("Thank you for using discord RPC Service by zhiyan114. With big thanks to DiscordRPC C# lib that allows this to happen.");
 #if DEBUG
             this.Text = this.Text + " (Debug Mode)";
             WriteLog("Debug Mode Enabled. If you're seeing this, please use release mode instead unless your developing.");
@@ -32,11 +33,15 @@ namespace Discord_RPC
         private void Rpcclient_OnPresenceUpdate(object sender, DiscordRPC.Message.PresenceMessage args)
         {
             WriteLog("Your Presence has been updated.");
+            button2.Enabled = true;
         }
 
         private void Rpcclient_OnReady(object sender, DiscordRPC.Message.ReadyMessage args)
         {
             WriteLog("Client Connected. Detected User: "+args.User.Username+"#"+args.User.Discriminator+" (ID: "+args.User.ID+")");
+            button2.Enabled = true;
+            MessageBox.Show("The client was successful initialized", "Initialized Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            DiscordRPCRender.Start();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -56,10 +61,7 @@ namespace Discord_RPC
                 }
                 AppIDInput.ReadOnly = true;
                 button1.Enabled = false;
-                button2.Enabled = true;
-                MessageBox.Show("The client was successful initialized", "Initialized Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // Do Some Configuration Here
-                DiscordRPCRender.Start();
+                WriteLog("Loading Client... (If you do not see any futher logs in a while, then it means that the client ID you supplied could be invalid. Restart the software and try again)");
             } else
             {
                 MessageBox.Show(this, "Invalid Application ID Detected.", "Invalid APP ID", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -83,13 +85,42 @@ namespace Discord_RPC
         private void button2_Click(object sender, EventArgs e)
         {
             RichPresence presence = new RichPresence();
-            Assets RPCAsset = new Assets();
-            RPCAsset.
-            presence.WithAssets(RPCAsset);
+            if(!string.IsNullOrWhiteSpace(LargeImageIDInput.Text) || !string.IsNullOrWhiteSpace(SmallImageIDInput.Text))
+            {
+                Assets RPCAsset = new Assets();
+                if(!string.IsNullOrWhiteSpace(LargeImageIDInput.Text))
+                {
+                    RPCAsset.LargeImageKey = LargeImageIDInput.Text;
+                    RPCAsset.LargeImageText = LargeImageTextInput.Text;
+                }
+                if(!string.IsNullOrWhiteSpace(SmallImageIDInput.Text)) {
+                    RPCAsset.SmallImageKey = SmallImageIDInput.Text;
+                    RPCAsset.SmallImageText = SmallImageTextInput.Text;
+                }
+                presence.WithAssets(RPCAsset);
+            }
+            if(!string.IsNullOrWhiteSpace(FirstButtonNameInput.Text) && !string.IsNullOrWhiteSpace(FirstButtonLinkInput.Text))
+            {
+                DiscordRPC.Button[] ButtonList = new DiscordRPC.Button[1];
+                DiscordRPC.Button FirstBtn = new DiscordRPC.Button();
+                FirstBtn.Label = FirstButtonNameInput.Text;
+                FirstBtn.Url = FirstButtonLinkInput.Text;
+                if(!string.IsNullOrWhiteSpace(SecondButtonNameInput.Text) && !string.IsNullOrWhiteSpace(SecondButtonLinkInput.Text))
+                {
+                    ButtonList = new DiscordRPC.Button[2];
+                    DiscordRPC.Button SecondBtn = new DiscordRPC.Button();
+                    SecondBtn.Label = SecondButtonNameInput.Text;
+                    SecondBtn.Url = SecondButtonLinkInput.Text;
+                    ButtonList.SetValue(SecondBtn, 1);
+                }
+                ButtonList.SetValue(FirstBtn, 0);
+                presence.Buttons = ButtonList;
+            }
             presence.WithState(StateInput.Text);
             presence.WithDetails(DetailInput.Text);
-            presence.Buttons = { };
             rpcclient.SetPresence(presence);
+            WriteLog("presence update has been added to the queue...");
+            button2.Enabled = false;
         }
     }
 }

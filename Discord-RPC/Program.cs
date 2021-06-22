@@ -60,7 +60,7 @@ namespace Discord_RPC
 
         static public SentryEvent PrepareEvent(SentryEvent e)
         {
-            e.SetTag("Ignore Report", ShowReport.ToString());
+            e.SetTag("Ignore Report", (!ShowReport).ToString());
             return e;
         }
     }

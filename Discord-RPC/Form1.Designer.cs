@@ -337,9 +337,9 @@
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.Location = new System.Drawing.Point(559, 307);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(84, 18);
+            this.label18.Size = new System.Drawing.Size(106, 18);
             this.label18.TabIndex = 29;
-            this.label18.Text = "First Button";
+            this.label18.Text = "Second Button";
             // 
             // label19
             // 

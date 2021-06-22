@@ -64,6 +64,7 @@
             this.SecondButtonNameInput = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.SecondButtonLinkInput = new System.Windows.Forms.TextBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // label1
@@ -373,11 +374,23 @@
             this.SecondButtonLinkInput.Size = new System.Drawing.Size(150, 20);
             this.SecondButtonLinkInput.TabIndex = 33;
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(12, 121);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(93, 13);
+            this.linkLabel1.TabIndex = 34;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Get Application ID";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(724, 714);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.SecondButtonLinkInput);
             this.Controls.Add(this.label20);
             this.Controls.Add(this.SecondButtonNameInput);
@@ -459,6 +472,7 @@
         private System.Windows.Forms.TextBox SecondButtonNameInput;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.TextBox SecondButtonLinkInput;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
 

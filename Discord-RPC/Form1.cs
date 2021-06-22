@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -81,6 +82,16 @@ namespace Discord_RPC
         {
             InternalLogDisplay.Text = InternalLogDisplay.Text + DateTime.Now.ToString("h:mm:ss tt")+": "+text + "\r\n";
         }
+        private bool CheckLength(TextBox textbox)
+        {
+            if(textbox.Text.Length > 32)
+            {
+                MessageBox.Show("The textbox "+textbox.Name+" has exceeded the maximum input of 32 characters. Please reduce the character count and try again","Max Character Length",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                WriteLog(textbox.Name +" are only allowed a maximum of 32 characters, received "+textbox.Text.Length+" characters");
+                return true;
+            }
+            return false;
+        }
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -90,10 +101,14 @@ namespace Discord_RPC
                 Assets RPCAsset = new Assets();
                 if(!string.IsNullOrWhiteSpace(LargeImageIDInput.Text))
                 {
+                    if (CheckLength(LargeImageTextInput))
+                        return;
                     RPCAsset.LargeImageKey = LargeImageIDInput.Text;
                     RPCAsset.LargeImageText = LargeImageTextInput.Text;
                 }
                 if(!string.IsNullOrWhiteSpace(SmallImageIDInput.Text)) {
+                    if (CheckLength(SmallImageTextInput))
+                        return;
                     RPCAsset.SmallImageKey = SmallImageIDInput.Text;
                     RPCAsset.SmallImageText = SmallImageTextInput.Text;
                 }
@@ -103,12 +118,16 @@ namespace Discord_RPC
             {
                 DiscordRPC.Button[] ButtonList = new DiscordRPC.Button[1];
                 DiscordRPC.Button FirstBtn = new DiscordRPC.Button();
+                if (CheckLength(FirstButtonNameInput))
+                    return;
                 FirstBtn.Label = FirstButtonNameInput.Text;
                 FirstBtn.Url = FirstButtonLinkInput.Text;
-                if(!string.IsNullOrWhiteSpace(SecondButtonNameInput.Text) && !string.IsNullOrWhiteSpace(SecondButtonLinkInput.Text))
+                if (!string.IsNullOrWhiteSpace(SecondButtonNameInput.Text) && !string.IsNullOrWhiteSpace(SecondButtonLinkInput.Text))
                 {
                     ButtonList = new DiscordRPC.Button[2];
                     DiscordRPC.Button SecondBtn = new DiscordRPC.Button();
+                    if (CheckLength(SecondButtonNameInput))
+                        return;
                     SecondBtn.Label = SecondButtonNameInput.Text;
                     SecondBtn.Url = SecondButtonLinkInput.Text;
                     ButtonList.SetValue(SecondBtn, 1);
@@ -116,11 +135,18 @@ namespace Discord_RPC
                 ButtonList.SetValue(FirstBtn, 0);
                 presence.Buttons = ButtonList;
             }
+            if (CheckLength(StateInput) || CheckLength(DetailInput))
+                return;
             presence.WithState(StateInput.Text);
             presence.WithDetails(DetailInput.Text);
             rpcclient.SetPresence(presence);
             WriteLog("presence update has been added to the queue...");
             button2.Enabled = false;
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://discord.com/developers/applications");
         }
     }
 }

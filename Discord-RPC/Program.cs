@@ -25,7 +25,7 @@ namespace Discord_RPC
                 o.TracesSampleRate = 0.5;
 #elif RELEASE
                 o.Environment = "Release";
-                o.Release = "Discord-RPC@1.0.0";
+                o.Release = "Discord-RPC@1.0.1.0";
                 o.TracesSampleRate = 0.1;
 #endif
                 o.BeforeSend = a => PrepareEvent(a);
